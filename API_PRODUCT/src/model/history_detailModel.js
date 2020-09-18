@@ -46,6 +46,19 @@ const history_detailModel = {
                 })
         })
     },
+    insertModelHistoryDetail:(data,id) => {
+        return new Promise((resolve,reject) => {
+            db.query(`INSERT INTO history_detail (history_id,product_id,name_product,qty,price)
+            VALUES('${id})','${data.product_id}','${data.name_product}','${data.qty}','${data.price}')`,
+            (err,results) => {
+                if (err) {
+                    reject(new Error(err))
+                }else{
+                    resolve(results)
+                }
+            })
+        })
+    },
     deleteModel: (id) => {
         return new Promise((resolve, reject) => {
             db.query(`DELETE FROM history_detail WHERE id='${id}'`,

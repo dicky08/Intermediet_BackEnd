@@ -9,7 +9,8 @@ loginCtr,
 refreshToken,
 deleteToken,
 deleteUser,
-updateCtr
+updateCtr,
+verify
 } = require("../controller/usersController");
 
 router
@@ -18,8 +19,8 @@ router
   .post("/login", loginCtr)
   .post("/token", refreshToken)
   .patch("/update/:id", updateCtr)
-  .delete("/logout", deleteToken)
+  .patch("/logout/:id", deleteToken)
   .delete("/deleted/:id", deleteUser)
-
+  .get('/verify/:token',verify)
 
 module.exports = router;

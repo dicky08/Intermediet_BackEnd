@@ -11,6 +11,7 @@ const {insertModelHistoryDetail} = require('../model/history_detailModel')
 const {
     success,
     failed,
+    notFound
 } = require('../helper/respons');
 // Redis
 const redis = require('redis')
@@ -51,7 +52,9 @@ const historyController = {
         const id = req.params.id;
         getdetailModel(id)
             .then((result) => {
-                redisClient.set('get_detail_history', JSON.stringify(result))
+                if (result.length<1) {
+                    notFound(res,[],'Data Not Found')
+                }
                 success(res, result, 'Get Detail History Success');
             })
             .catch((err) => {
@@ -59,24 +62,21 @@ const historyController = {
             })
     },
     insertCtr: (req, res) => {
-        // const id = req.params.id;
         const body = req.body;
         insertModel(body)
             .then((result) => {
-                // redisClient.del('produk')
                 const idMaster = result.insertId
                 const inserDetail = body.detail.map((item)=>{
                     insertModelHistoryDetail(item,idMaster)
                 })
                 Promise.all(inserDetail)
                 .then(() => {
-                    redisClient.del('get_detail_history')
+                    redisClient.del('history')
                     success(res, result, 'Success Insert')
                 })
                 .catch((err)=> {
                     failed(res,[],err.message)
                 })
-              
             })
             .catch((err) => {
                 failed(res, [], err.message)
@@ -86,8 +86,8 @@ const historyController = {
         const id = req.params.id;
         const body = req.body;
         updateModel(body, id)
-            .then((result) => {
-                redisClient.del('get_detail_history')
+        .then((result) => {
+                redisClient.del('history')
                 success(res, result, 'Update History Success');
             })
             .catch((err) => {
@@ -96,9 +96,10 @@ const historyController = {
     },
     deleteCtr: (req, res) => {
         const id = req.params.id;
+
         deleteModel(id)
             .then((result) => {
-                redisClient.del('get_detail_history')
+                redisClient.del('history')
                 success(res, result, 'Delete History Success');
             })
             .catch((err) => {

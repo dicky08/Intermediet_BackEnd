@@ -4,17 +4,15 @@ const router = express.Router();
 const {
     getAllCtr,
     getDetailCtr,
-    updateCtr,
-    deleteCtr
+    updateCtr
 } = require('../controller/history_detailController');
 // Auth
-const {authentication,authorisazation} = require('../helper/authitentikasi')
+const {authentication,authorisazation,admin} = require('../helper/authitentikasi')
 // Redis
-const {getRedisAllHistoryDetail,getRedisGetDetailHistoryDetail} = require('../helper/redis_history_detail')
+const {getRedisAllHistoryDetail} = require('../helper/redis_history_detail')
 router
-    .get('/getAll',authentication,authorisazation, getAllCtr)
-    .get('/getDetail/:id',authentication,authorisazation,getRedisGetDetailHistoryDetail,getDetailCtr)
+    .get('/getAll',authentication,authorisazation,getRedisAllHistoryDetail, getAllCtr)
+    .get('/getDetail/:id',authentication,authorisazation,getDetailCtr)
     .put('/update/:id',authentication,authorisazation, updateCtr)
-    .delete('/delete/:id',authentication,authorisazation, deleteCtr);
 
 module.exports = router;

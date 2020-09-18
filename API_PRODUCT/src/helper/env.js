@@ -11,5 +11,8 @@ module.exports = {
     DATE: process.env.DATE,
     JWTPRIVATE:process.env.JWTPRIVATE,
     JWT_REFRESH:process.env.JWT_REFRESH,
+    EMAIL:process.env.EMAIL,
+    PASSWORD:process.env.PASSWORD,
+    JWT_REGIS:process.env.JWT_REGIS, 
 
 }

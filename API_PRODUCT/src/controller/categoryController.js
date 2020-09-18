@@ -54,7 +54,6 @@ const categoryController = {
                 if (result.length < 1) {
                     notFound(res, result, 'Data Not Found')
                 }
-                redisClient.set('detail_category', JSON.stringify(result))
                 success(res, result, 'Get Detail Category Success');
             })
             .catch((err) => {

@@ -1,7 +1,13 @@
 const redis = require('redis')
 const redisClient = redis.createClient()
+const _ = require('lodash')
+const {
+    success,
+    notFound,
+    dataTable
+} = require("./respons");
+
 // Respond
-const  {success} = require('./respons')
 module.exports = {
     getRedisAllHistory:(req,res,next) => {
         redisClient.get('history', (err,data) => {

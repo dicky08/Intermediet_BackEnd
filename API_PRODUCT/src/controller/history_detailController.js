@@ -2,7 +2,6 @@
 const {
     getAllModel,
     getdetailModel,
-    insertModel,
     updateModel,
     deleteModel
 } = require('../model/history_detailModel');
@@ -42,7 +41,9 @@ const history_detailController = {
             const id = req.params.id;
             getdetailModel(id)
             .then((result) => {
-                redisClient.set('get_detail_historyDetail', JSON.stringify(result))
+                if (result.length<1) {
+                    notFound(res,[], 'Data not Found')
+                }
                 success(res, result, 'Get Detail History Detail Success');
             })
             .catch((err) => {
@@ -54,24 +55,13 @@ const history_detailController = {
         const body = req.body;
         updateModel(body, id)
             .then((result) => {
-                redisClient.del('produk')
+                redisClient.del('history_detail')
                 success(res, result, 'Update History Detail Success');
             })
             .catch((err) => {
                 failed(res, [], err.message)
             })
     },
-    deleteCtr: (req, res) => {
-        const id = req.params.id;
-        deleteModel(id)
-            .then((result) => {
-                redisClient.del('produk')
-                success(res, result, 'Delete History Detail Success');
-            })
-            .catch((err) => {
-                failed(res, [], err.message)
-            })
-    }
 }
 
 module.exports = history_detailController;

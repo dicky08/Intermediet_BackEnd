@@ -59,21 +59,11 @@ const historyModel = {
       },
     updateModel: (data, id) => {
         return new Promise((resolve, reject) => {
-            let obj = {
-                csName: data.cashier_name,
-                invoice: data.invoice,
-                ppn: data.ppn,
-                amount: data.amount
-            }
-            const {
-                csName,
-                ppn,
-                amount
-            } = obj;
             db.query(`UPDATE history SET
-                    cashier_name = '${csName}',
-                    ppn                = '${ppn}',
-                    amount          = '${amount}'
+                    cashier_name = '${data.cashier_name}',
+                    invoice = '${data.invoice}',
+                    ppn                = '${data.ppn}',
+                    amount          = '${data.amount}'
                     WHERE id       = '${id}'`,
                 (err, result) => {
                     if (err) {

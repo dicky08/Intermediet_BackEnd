@@ -1,10 +1,10 @@
 const redis = require('redis')
 const redisClient = redis.createClient()
-const { success } = require('./respons')
-
+const { success,dataTable } = require('./respons')
+const _ = require('lodash')
 module.exports = {
     getRedisAllCategory: (req, res,next) => {
-        redisClient.get('categorys', (req,data) => {
+        redisClient.get('categorys', (err,data) => {
             if (data) {
                 const name = !req.query.name ? null : req.query.name;
                 const orderBy = !req.query.orderBy ? 'id' : req.query.orderBy;
@@ -18,7 +18,7 @@ module.exports = {
                 const sorting = _.orderBy(results,[orderBy],[sort])
                     let dataRedis = sorting
                     if (name!==null) {
-                        const searching = sorting.filter(e => e.product_name.toLowerCase().includes(name.toLowerCase()))
+                        const searching = sorting.filter(e => e.category_name.toLowerCase().includes(name.toLowerCase()))
                         dataRedis=searching
                     }
                     const countData = {
