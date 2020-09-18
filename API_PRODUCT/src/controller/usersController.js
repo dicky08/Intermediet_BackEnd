@@ -2,7 +2,7 @@ require("dotenv").config();
 // Model
 const { registerModel, loginModel, UpdateRefreshToken, deleteModel, deleteModelToken, updatePatchData, getUsers } = require("../model/usersModel");
 // Impor ENV
-const { JWTPRIVATE, JWT_REFRESH, JWT_REGIS, EMAIL, PASSWORD } = require("../helper/env");
+const { JWTPRIVATE, JWT_REFRESH, JWT_REGIS, EMAIL, PASSWORD,URL_LOKAL } = require("../helper/env");
 // Helper
 const { success, failed, notFound, tokenResult, tokenFailed, tokenForbidden, } = require("../helper/respons");
 // Import BYCRPT
@@ -50,9 +50,9 @@ const usersController = {
                     to: data.email,
                     subject: 'Welcome to activation',
                     html: `
-                Please activation of email !<br>
-                <a href="http://localhost:3000/users/verify/${hash}">Activasi</a>
-            `
+                    Please activation of email !<br>
+                    <a href="${URL_LOKAL}/users/verify/${hash}">Activasi</a>
+                     `
                 }
                 transporter.sendMail(mailOptions, (err, sukses) => {
                     if (err) {

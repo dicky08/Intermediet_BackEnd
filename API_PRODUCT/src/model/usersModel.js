@@ -6,7 +6,7 @@ const usersModel = {
         return new Promise((resolve, reject) => {
             db.query(
                 `INSERT INTO users (email,password,level,is_active) 
-            VALUES('${data.email}','${data.password}','${data.level}','${data.is_active}' )`,
+            VALUES('${data.email}','${data.password}','${data.level}',0)`,
                 (err, result) => {
                     if (err) {
                         reject(new Error(err));

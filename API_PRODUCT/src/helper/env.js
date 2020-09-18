@@ -14,5 +14,7 @@ module.exports = {
     EMAIL:process.env.EMAIL,
     PASSWORD:process.env.PASSWORD,
     JWT_REGIS:process.env.JWT_REGIS, 
+    URL:process.env.URL, 
+    URL_LOKAL:process.env.URL_LOKAL, 
 
 }
