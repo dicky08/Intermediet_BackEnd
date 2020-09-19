@@ -4,6 +4,7 @@ const router = express.Router();
 
 // Destructur Method yg ada Controller
 const {
+getAllUserCtr,
 registerCtr,
 loginCtr,
 refreshToken,
@@ -12,9 +13,10 @@ deleteUser,
 updateCtr,
 verify
 } = require("../controller/usersController");
-
+const {authentication,authorisazation,admin} = require('../helper/authitentikasi')
 router
 
+  .get("/getAll",authentication,authorisazation,admin, getAllUserCtr)
   .post("/register", registerCtr)
   .post("/login", loginCtr)
   .post("/token", refreshToken)

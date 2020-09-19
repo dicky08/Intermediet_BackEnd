@@ -57,7 +57,7 @@ getAllCtr: (req, res) => {
     getAllModel(where, name, orderBy, sort, start, jmlhDataPerhalaman)
         .then((result) => {
             if (result.length < 1) {
-                res.sendStatus(404)
+                res.status(404)
                 notFound(res, result, 'Data Not Found')
             }
             const countData = result[0].count;
@@ -66,12 +66,12 @@ getAllCtr: (req, res) => {
                 totalPages: Math.ceil(countData / jmlhDataPerhalaman),
                 pagesActive
             }
-            res.sendStatus(200)
+            res.status(200)
             dataTable(res, result, coundDatabase, `Get All Product Success`)
 
         })
         .catch((err) => {
-            res.sendStatus(500)
+            res.status(500)
             failed(res, [], err.message)
         })
     // GET REDIS
@@ -90,13 +90,13 @@ getDetailCtr: (req, res) => {
     getDetailModel(id)
         .then((result) => {
             if (result.length < 1) {
-                res.sendStatus(404)
+                res.status(404)
                 notFound(res, result, 'Data Not Found')
             }
-            res.sendStatus(500)
             success(res, result, 'Get Detail Product Success');
         })
         .catch((err) => {
+            res.status(500)
             failed(res, [], err.message)
         })
 },

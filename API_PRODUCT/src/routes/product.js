@@ -17,9 +17,9 @@ const {
 
 router
 
-  .get("/best-product",authentication,authorisazation,getRedisBestProduct , besProductCtr)
-  .get("/getAll",authentication,authorisazation,getRedisProduct ,getAllCtr)
-  .get("/getDetail/:id_product",authentication,authorisazation, getDetailCtr)
+  .get("/best-product",getRedisBestProduct , besProductCtr)
+  .get("/getAll",getRedisProduct ,getAllCtr)
+  .get("/getDetail/:id_product", getDetailCtr)
   .post("/insert",authentication,authorisazation,admin,  insertCtr)
   .put("/update/:id_product",authentication,authorisazation,admin, updateCtr)
   .patch("/updatePatch/:id_product",authentication,authorisazation,admin, updatePatch)

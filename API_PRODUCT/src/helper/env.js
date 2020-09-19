@@ -6,7 +6,7 @@ module.exports = {
     // COnfig Database
     DB_HOST: process.env.DB_HOST,
     DB_USERNAME: process.env.DB_USERNAME,
-    DB_PASS: process.env.DB_PASS,
+    DB_PASSWORD: process.env.DB_PASSWORD,
     DATABASE: process.env.DATABASE,
     DATE: process.env.DATE,
     JWTPRIVATE:process.env.JWTPRIVATE,

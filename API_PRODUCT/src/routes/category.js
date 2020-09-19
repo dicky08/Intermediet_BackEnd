@@ -14,8 +14,8 @@ const {authentication,authorisazation,admin} = require('../helper/authitentikasi
 const {getRedisAllCategory} = require('../helper/redis_category')
 
 router
-    .get('/getAll',authentication,authorisazation,getRedisAllCategory, getAllCtr)
-    .get('/getDetail/:id',authentication,authorisazation, getDetailCtr)
+    .get('/getAll',getRedisAllCategory, getAllCtr)
+    .get('/getDetail/:id', getDetailCtr)
     .post('/insert',authentication,authorisazation,admin, insertCtr)
     .put('/update/:id',authentication,authorisazation,admin, updateCtr)
     .delete('/delete/:id',authentication,authorisazation,admin, deleteCtr);

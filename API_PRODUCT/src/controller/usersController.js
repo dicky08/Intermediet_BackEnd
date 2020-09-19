@@ -1,6 +1,6 @@
 require("dotenv").config();
 // Model
-const { registerModel, loginModel, UpdateRefreshToken, deleteModel, deleteModelToken, updatePatchData, getUsers } = require("../model/usersModel");
+const { registerModel, loginModel, UpdateRefreshToken, deleteModel, deleteModelToken, updatePatchData, getUsers,getAllUser } = require("../model/usersModel");
 // Impor ENV
 const { JWTPRIVATE, JWT_REFRESH, JWT_REGIS, EMAIL, PASSWORD,URL_LOKAL } = require("../helper/env");
 // Helper
@@ -12,6 +12,15 @@ const jwt = require("jsonwebtoken");
 const nodeMailer = require("nodemailer");
 
 const usersController = {
+    ////////////////////////////////////GET USER/////////////////////////////////
+    getAllUserCtr:(req,res) => {
+        getAllUser()
+        .then((result) => {
+         success(res, result, 'Success get All Data User' )   
+        }).catch((err) => {
+            failed(res,[], err.message)
+        });
+    },
     ////////////////////////////////////CONTROLLER/////////////////////////////////
     // Register
     registerCtr: async (req, res) => {
@@ -46,9 +55,9 @@ const usersController = {
                 })
 
                 let mailOptions = {
-                    from: EMAIL,
+                    from: '👻'+ EMAIL,
                     to: data.email,
-                    subject: 'Welcome to activation',
+                    subject: `Hello ${data.email} ✔ `,
                     html: `
                     Please activation of email !<br>
                     <a href="${URL_LOKAL}/users/verify/${hash}">Activasi</a>
@@ -59,7 +68,7 @@ const usersController = {
                         res.status(500)
                         failed(res, [], err.message);
                     } else {
-                        success(res, [], 'Oke')
+                        success(res, [sukses], 'Oke')
                     }
                 })
                 res.json({
@@ -143,7 +152,7 @@ const usersController = {
         const newToken = req.body.token;
         if (newToken) {
             jwt.verify(newToken, JWT_REFRESH, (err, result) => {
-                const refReshTOKEN = generateToken({ email: result.email, });
+                const refReshTOKEN = generateToken({ email: result.email,level:result.level });
                 res.status(200)
                 tokenResult(res, { newToken: refReshTOKEN, }, "Refresh token success");
             });

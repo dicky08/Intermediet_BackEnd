@@ -35,7 +35,6 @@ const response = {
         const eror = {
             success: false,
             code: 404,
-            status: 'Not Found',
             message,
             data
         }

@@ -11,8 +11,8 @@ const {authentication,authorisazation,admin} = require('../helper/authitentikasi
 // Redis
 const {getRedisAllHistoryDetail} = require('../helper/redis_history_detail')
 router
-    .get('/getAll',authentication,authorisazation,getRedisAllHistoryDetail, getAllCtr)
-    .get('/getDetail/:id',authentication,authorisazation,getDetailCtr)
+    .get('/getAll',getRedisAllHistoryDetail, getAllCtr)
+    .get('/getDetail/:id',getDetailCtr)
     .put('/update/:id',authentication,authorisazation, updateCtr)
 
 module.exports = router;
