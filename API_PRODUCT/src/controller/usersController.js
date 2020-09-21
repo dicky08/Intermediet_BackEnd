@@ -126,7 +126,7 @@ const usersController = {
                                 }
                             }
                         }else{
-                            res.status(500)
+                            res.status(404)
                             notFound(res, [], "Wrong password");
                         }
                     } else {
