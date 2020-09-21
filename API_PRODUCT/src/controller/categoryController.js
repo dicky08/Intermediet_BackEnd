@@ -32,69 +32,76 @@ const categoryController = {
         getAllModel(where, name, orderBy, sort, start, jmlhDataPerhalaman)
             .then((result) => {
                 if (result.length < 1) {
-                    notFound(res, result, 'Data Not Found')
-                }
-                redisClient.set('categorys', JSON.stringify(result))
-                const countData = result[0].count;
-                const coundDatabase = {
-                    totalRow: countData,
-                    totalPages: Math.ceil(countData / jmlhDataPerhalaman),
-                    pagesActive
-                }
-                dataTable(res, result, coundDatabase, `Get All Category Success`)
+                  res.status(404)
+                  notFound(res, result, 'Data Not Found')
+            }
+            redisClient.set('categorys', JSON.stringify(result))
+            const countData = result[0].count;
+            const coundDatabase = {
+                  totalRow: countData,
+                  totalPages: Math.ceil(countData / jmlhDataPerhalaman),
+                  pagesActive
+            }
+            dataTable(res, result, coundDatabase, `Get All Category Success`)
+      })
+      .catch((err) => {
+            res.status(500)
+            failed(res, [], err.message)
+      })
+},
+getDetailCtr: (req, res) => {
+      const id = req.params.id;
+      getDetailModel(id)
+      .then((result) => {
+            if (result.length < 1) {
+                  res.status(404)
+                  notFound(res, result, 'Data Not Found')
+            }
+            success(res, result, 'Get Detail Category Success');
+      })
+      .catch((err) => {
+                  res.status(500)
+                  failed(res, [], err.message)
             })
-            .catch((err) => {
-                failed(res, [], err.message)
-            })
-    },
-    getDetailCtr: (req, res) => {
-        const id = req.params.id;
-        getDetailModel(id)
-            .then((result) => {
-                if (result.length < 1) {
-                    notFound(res, result, 'Data Not Found')
-                }
-                success(res, result, 'Get Detail Category Success');
-            })
-            .catch((err) => {
-                failed(res, [], err.message)
-            })
-    },
-    insertCtr: (req, res) => {
-        const body = req.body
+      },
+      insertCtr: (req, res) => {
+            const body = req.body
         insertModel(body)
-            .then((result) => {
-                redisClient.del('categorys')
-                success(res, result, 'Insert Category Success');
+        .then((result) => {
+              redisClient.del('categorys')
+              success(res, result, 'Insert Category Success');
             })
             .catch((err) => {
-                failed(res, [], err.message)
+                  res.status(500)
+                  failed(res, [], err.message)
             })
-    },
-    updateCtr: (req, res) => {
-        const id = req.params.id;
+      },
+      updateCtr: (req, res) => {
+            const id = req.params.id;
         const body = req.body;
         updateModel(body, id)
-            .then((result) => {
-                redisClient.del('categorys')
-                success(res, result, 'Update Category Success');
+        .then((result) => {
+              redisClient.del('categorys')
+              success(res, result, 'Update Category Success');
             })
             .catch((err) => {
-                failed(res, [], err.message)
+                  res.status(500)
+                  failed(res, [], err.message)
             })
-    },
-    deleteCtr: (req, res) => {
-        const id = req.params.id;
-        deleteModel(id)
+      },
+      deleteCtr: (req, res) => {
+            const id = req.params.id;
+            deleteModel(id)
             .then((result) => {
-                redisClient.del('categorys')
-                success(res, result, 'Delete Category Success');
+                  redisClient.del('categorys')
+                  success(res, result, 'Delete Category Success');
             })
             .catch((err) => {
-                failed(res, [], err.message)
+                  res.status(500)
+                  failed(res, [], err.message)
             })
     }
-
+    
 }
 
 module.exports = categoryController;

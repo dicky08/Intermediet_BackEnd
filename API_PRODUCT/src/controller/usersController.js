@@ -14,13 +14,14 @@ const nodeMailer = require("nodemailer");
 const usersController = {
     ////////////////////////////////////GET USER/////////////////////////////////
     getAllUserCtr:(req,res) => {
-        getAllUser()
-        .then((result) => {
+          getAllUser()
+          .then((result) => {
          success(res, result, 'Success get All Data User' )   
-        }).catch((err) => {
+      }).catch((err) => {
+            res.status(500)
             failed(res,[], err.message)
-        });
-    },
+      });
+},
     ////////////////////////////////////CONTROLLER/////////////////////////////////
     // Register
     registerCtr: async (req, res) => {
@@ -107,10 +108,8 @@ const usersController = {
                                 UpdateRefreshToken(refreshToken, id)
                                     .then(() => {
                                         if (level === 0) {
-                                            res.status(200)
                                             tokenResult(res, { id, email, level, accessToken: getToken, refreshToken: refreshToken }, "Login Success, you are logged in as Admin");
                                         } else {
-                                            res.status(200)
                                             tokenResult(res, { id, email, level, accessToken: getToken, refreshToken: refreshToken }, "Login Success, you are logged in as Cashier"
                                             );
                                         }
@@ -121,10 +120,8 @@ const usersController = {
                                     });
                             } else {
                                 if (level === 0) {
-                                    res.status(200)
                                     tokenResult(res, { id, email, level, accessToken: getToken, refreshToken: sukses.refreshToken, }, "Login Success, you are logged in as Admin");
                                 } else {
-                                    res.status(200)
                                     tokenResult(res, { id, email, level, accessToken: getToken, refreshToken: sukses.refreshToken, }, "Login Success, you are logged in as Cashier");
                                 }
                             }
@@ -153,7 +150,6 @@ const usersController = {
         if (newToken) {
             jwt.verify(newToken, JWT_REFRESH, (err, result) => {
                 const refReshTOKEN = generateToken({ email: result.email,level:result.level });
-                res.status(200)
                 tokenResult(res, { newToken: refReshTOKEN, }, "Refresh token success");
             });
         } else {
@@ -171,7 +167,6 @@ const usersController = {
         } else {
             deleteModelToken(id)
                 .then((result) => {
-                    res.status(200)
                     success(res, result, 'Success')
                 }).catch((err) => {
                     res.status(500)
@@ -186,7 +181,6 @@ const usersController = {
         const id = req.params.id;
         deleteModel(id)
             .then((result) => {
-                res.status(200)
                 success(res, result, "Success delete");
             })
             .catch((err) => {
@@ -201,7 +195,6 @@ const usersController = {
         const body = req.body
         updatePatchData(body, id)
             .then((result) => {
-                res.status(200)
                 success(res, result, 'Success Update')
             }).catch((err) => {
                 res.status(500)
@@ -222,7 +215,6 @@ const usersController = {
                     getUsers(email)
                         .then((result) => {
                             if (result.affectedRows) {
-                                res.status(200)
                                 success(res, { email }, 'Congratulation, Your account has been created!')
                             }
                             res.status(500)

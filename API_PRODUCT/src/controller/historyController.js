@@ -31,81 +31,89 @@ const historyController = {
 
         getAllModel()
             .then((result) => {
-                redisClient.set('history', JSON.stringify(result))
-                success(res, result, 'Get All History Success');
+                  redisClient.set('history', JSON.stringify(result))
+                  success(res, result, 'Get All History Success');
             })
             .catch((err) => {
-                failed(res, [], err.message)
+                  res.status(400)
+                  failed(res, [], err.message)
             })
-    },
-    getJoinCtr: (req, res) => {
-        getJoinModel()
+      },
+      getJoinCtr: (req, res) => {
+            getJoinModel()
             .then((result) => {
-                redisClient.set('join_history', JSON.stringify(result))
-                success(res, result, 'Get Join All History Success');
+                  redisClient.set('join_history', JSON.stringify(result))
+                  success(res, result, 'Get Join All History Success');
             })
             .catch((err) => {
-                failed(res, [], err.message)
+                  res.status(500)
+                  failed(res, [], err.message)
             })
-    },
-    getDetailCtr: (req, res) => {
-        const id = req.params.id;
-        getdetailModel(id)
+      },
+      getDetailCtr: (req, res) => {
+            const id = req.params.id;
+            getdetailModel(id)
             .then((result) => {
-                if (result.length<1) {
-                    notFound(res,[],'Data Not Found')
-                }
-                success(res, result, 'Get Detail History Success');
+                  if (result.length<1) {
+                        res.status(404)
+                        notFound(res,[],'Data Not Found')
+                  }
+                  success(res, result, 'Get Detail History Success');
             })
             .catch((err) => {
-                failed(res, [], err.message)
+                  res.status(500)
+                  failed(res, [], err.message)
             })
-    },
-    insertCtr: (req, res) => {
-        const body = req.body;
-        insertModel(body)
+      },
+      insertCtr: (req, res) => {
+            const body = req.body;
+            insertModel(body)
             .then((result) => {
-                const idMaster = result.insertId
-                const inserDetail = body.detail.map((item)=>{
-                    insertModelHistoryDetail(item,idMaster)
-                })
-                Promise.all(inserDetail)
-                .then(() => {
-                    redisClient.del('history')
-                    success(res, result, 'Success Insert')
-                })
-                .catch((err)=> {
-                    failed(res,[],err.message)
-                })
+                  const idMaster = result.insertId
+                  const inserDetail = body.detail.map((item)=>{
+                        insertModelHistoryDetail(item,idMaster)
+                  })
+                  Promise.all(inserDetail)
+                  .then(() => {
+                        redisClient.del('history')
+                        success(res, result, 'Success Insert')
+                  })
+                  .catch((err)=> {
+                        res.status(500)
+                        failed(res,[],err.message)
+                  })
             })
             .catch((err) => {
-                failed(res, [], err.message)
+                  res.status(500)
+                  failed(res, [], err.message)
             })
-    },
-    updateCtr: (req, res) => {
-        const id = req.params.id;
-        const body = req.body;
-        updateModel(body, id)
-        .then((result) => {
-                redisClient.del('history')
-                success(res, result, 'Update History Success');
+      },
+      updateCtr: (req, res) => {
+            const id = req.params.id;
+            const body = req.body;
+            updateModel(body, id)
+            .then((result) => {
+                  redisClient.del('history')
+                  success(res, result, 'Update History Success');
             })
             .catch((err) => {
-                failed(res, [], err.message)
+                  res.status(500)
+                  failed(res, [], err.message)
             })
     },
     deleteCtr: (req, res) => {
         const id = req.params.id;
-
+        
         deleteModel(id)
-            .then((result) => {
-                redisClient.del('history')
-                success(res, result, 'Delete History Success');
+        .then((result) => {
+              redisClient.del('history')
+              success(res, result, 'Delete History Success');
             })
             .catch((err) => {
-                failed(res, [], err.message)
+                  res.status(500)
+                  failed(res, [], err.message)
             })
-    }
+      }
 }
 
 module.exports = historyController;

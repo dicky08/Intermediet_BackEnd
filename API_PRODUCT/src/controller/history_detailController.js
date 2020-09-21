@@ -34,34 +34,38 @@ const history_detailController = {
                 success(res, result, 'Get All History Detail Success');
             })
             .catch((err) => {
-                failed(res, [], err.message)
+                  res.status(500)
+                  failed(res, [], err.message)
             })
         },
         getDetailCtr: (req, res) => {
-            const id = req.params.id;
-            getdetailModel(id)
-            .then((result) => {
-                if (result.length<1) {
-                    notFound(res,[], 'Data not Found')
-                }
-                success(res, result, 'Get Detail History Detail Success');
-            })
-            .catch((err) => {
-                failed(res, [], err.message)
-            })
+              const id = req.params.id;
+              getdetailModel(id)
+              .then((result) => {
+                    if (result.length<1) {
+                          res.status(404)
+                          notFound(res,[], 'Data not Found')
+                        }
+                        success(res, result, 'Get Detail History Detail Success');
+                  })
+                  .catch((err) => {
+                        res.status(500)
+                        failed(res, [], err.message)
+                  })
     },
     updateCtr: (req, res) => {
-        const id = req.params.id;
-        const body = req.body;
-        updateModel(body, id)
-            .then((result) => {
+          const id = req.params.id;
+          const body = req.body;
+          updateModel(body, id)
+          .then((result) => {
                 redisClient.del('history_detail')
                 success(res, result, 'Update History Detail Success');
             })
             .catch((err) => {
-                failed(res, [], err.message)
+                  res.status(500)
+                  failed(res, [], err.message)
             })
-    },
+      },
 }
 
 module.exports = history_detailController;

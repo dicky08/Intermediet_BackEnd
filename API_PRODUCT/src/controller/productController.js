@@ -33,42 +33,43 @@ besProductCtr: (req, res) => {
     const start = pagesActive === 1 ? 0 : (jmlhDataPerhalaman * pagesActive) - jmlhDataPerhalaman
     besProductModel(start, jmlhDataPerhalaman)
         .then((result) => {
-            if (result.length < 1) {
-                notFound(res, result, 'Data Not Found')
+              if (result.length < 1) {
+                  res.status(404)
+                  notFound(res, result, 'Data Not Found')
             }
             redisClient.set('best_product', JSON.stringify(result))
             success(res, result, 'Get Best Product Success');
-        })
-        .catch((err) => {
+      })
+      .catch((err) => {
+            res.status(500)
             failed(res, [], err.message)
-        })
+      })
 },
 // Get All Data
 getAllCtr: (req, res) => {
-    const where = !req.query.where ? 'product_name' : req.query.where
-    const name = !req.query.name ? '' : req.query.name
-    const orderBy = !req.query.orderBy ? 'id' : req.query.orderBy
-    const sort = !req.query.sort ? 'DESC' : req.query.sort
-    // Pagination
-    const jmlhDataPerhalaman = !req.query.limit ? 10 : parseInt(req.query.limit);
-    const pagesActive = !req.query.pages ? 1 : parseInt(req.query.pages);
-    const start = pagesActive === 1 ? 0 : (jmlhDataPerhalaman * pagesActive) - jmlhDataPerhalaman
-
-    getAllModel(where, name, orderBy, sort, start, jmlhDataPerhalaman)
-        .then((result) => {
+      const where = !req.query.where ? 'product_name' : req.query.where
+      const name = !req.query.name ? '' : req.query.name
+      const orderBy = !req.query.orderBy ? 'id' : req.query.orderBy
+      const sort = !req.query.sort ? 'DESC' : req.query.sort
+      // Pagination
+      const jmlhDataPerhalaman = !req.query.limit ? 10 : parseInt(req.query.limit);
+      const pagesActive = !req.query.pages ? 1 : parseInt(req.query.pages);
+      const start = pagesActive === 1 ? 0 : (jmlhDataPerhalaman * pagesActive) - jmlhDataPerhalaman
+      
+      getAllModel(where, name, orderBy, sort, start, jmlhDataPerhalaman)
+      .then((result) => {
             if (result.length < 1) {
-                res.status(404)
-                notFound(res, result, 'Data Not Found')
+                  res.status(404)
+                  notFound(res, result, 'Data Not Found')
             }
             const countData = result[0].count;
             const coundDatabase = {
-                totalRow: countData,
-                totalPages: Math.ceil(countData / jmlhDataPerhalaman),
-                pagesActive
+                  totalRow: countData,
+                  totalPages: Math.ceil(countData / jmlhDataPerhalaman),
+                  pagesActive
             }
-            res.status(200)
             dataTable(res, result, coundDatabase, `Get All Product Success`)
-
+            
         })
         .catch((err) => {
             res.status(500)
@@ -98,102 +99,113 @@ getDetailCtr: (req, res) => {
         .catch((err) => {
             res.status(500)
             failed(res, [], err.message)
-        })
+      })
 },
 // Insert Data
 insertCtr: (req, res) => {
-    upload.single('image')(req, res, (err) => {
-        if (err) {
-            // Cek Ukuran Gambar
-            if (err.code === 'LIMIT_FILE_SIZE') {
-                failed(res, [], 'File too large, (Max 2 mb)')
+      upload.single('image')(req, res, (err) => {
+            if (err) {
+                  // Cek Ukuran Gambar
+                  if (err.code === 'LIMIT_FILE_SIZE') {
+                        res.status(500)
+                        failed(res, [], 'File too large, (Max 2 mb)')
+                  } else {
+                        // Cek Ekstensi Gambar
+                        res.status(500)
+                        failed(res, [], 'File must be of type jpg,jpeg or png')
+                  }
             } else {
-                // Cek Ekstensi Gambar
-                failed(res, [], 'File must be of type jpg,jpeg or png')
+                  // Cek jika Gambar kosong
+                  if (req.file === undefined) {
+                        res.status(404)
+                        failed(res, [], 'Image canot be empty')
+                  } else {
+                        const body = req.body;
+                        body.image = req.file.filename
+                        insertModel(body)
+                        .then((result) => {
+                              redisClient.del('produk')
+                              success(res, result, 'Insert Product Success');
+                        })
+                        .catch((err) => {
+                              res.status(500)
+                              failed(res, [], err.message)
+                        })
             }
-        } else {
-            // Cek jika Gambar kosong
-            if (req.file === undefined) {
-                failed(res, [], 'Image canot be empty')
-            } else {
-                const body = req.body;
-                body.image = req.file.filename
-                insertModel(body)
-                    .then((result) => {
-                        redisClient.del('produk')
-                        success(res, result, 'Insert Product Success');
-                    })
-                    .catch((err) => {
-                        failed(res, [], err.message)
-                    })
-            }
-
-        }
-    })
+            
+      }
+})
 },
 // Update Data
 updateCtr: (req, res) => {
-    upload.single('image')(req, res, (err) => {
-        if (err) {
-            // Cek Ukuran Gambar
-            if (err.code === 'LIMIT_FILE_SIZE') {
-                failed(res, [], 'File too large, (Max 2 mb)')
+      upload.single('image')(req, res, (err) => {
+            if (err) {
+                  // Cek Ukuran Gambar
+                  if (err.code === 'LIMIT_FILE_SIZE') {
+                        res.status(500)
+                        failed(res, [], 'File too large, (Max 2 mb)')
+                  } else {
+                        // Cek Ekstensi Gambar
+                        res.status(500)
+                        failed(res, [], 'File must be of type jpg,jpeg or png')
+                  }
             } else {
-                // Cek Ekstensi Gambar
-                failed(res, [], 'File must be of type jpg,jpeg or png')
+                  const id = req.params.id_product;
+                  const body = req.body;
+                  body.image = req.file;
+                  
+                  updateModel(body, id)
+                  .then((result) => {
+                        redisClient.del('produk')
+                        success(res, result, 'Update Product Success');
+                  })
+                  .catch((err) => {
+                        res.status(500)
+                        failed(res, [], err.message)
+                  })
             }
-        } else {
-            const id = req.params.id_product;
-            const body = req.body;
-            body.image = req.file;
-
-            updateModel(body, id)
-                .then((result) => {
-                    redisClient.del('produk')
-                    success(res, result, 'Update Product Success');
-                })
-                .catch((err) => {
-                    failed(res, [], err.message)
-                })
-        }
-    })
+      })
 },
 // Delete Data
 deleteCtr: (req, res) => {
-    const id = req.params.id_product;
-    deleteModel(id)
-        .then((result) => {
+      const id = req.params.id_product;
+      deleteModel(id)
+      .then((result) => {
             redisClient.del('produk')
             success(res, result, 'Delete Product Success');
-        })
-        .catch((err) => {
+      })
+      .catch((err) => {
+            res.status(500)
             failed(res, [], err.message)
-        })
+      })
 },
 updatePatch: (req, res) => {
-    upload.single('image')(req, res, (err) => {
-        if (err) {
-            // Cek Ukuran Gambar
-            if (err.code === 'LIMIT_FILE_SIZE') {
-                failed(res, [], 'File too large, (Max 2 mb)')
-            } else {
-                // Cek Ekstensi Gambar
-                failed(res, [], 'File must be of type jpg,jpeg or png')
+      upload.single('image')(req, res, (err) => {
+            if (err) {
+                  // Cek Ukuran Gambar
+                  if (err.code === 'LIMIT_FILE_SIZE') {
+                        res.status(500)
+                        failed(res, [], 'File too large, (Max 2 mb)')
+                  } else {
+                  // Cek Ekstensi Gambar
+                  res.status(500)
+                  failed(res, [], 'File must be of type jpg,jpeg or png')
             }
-        } else {
+      } else {
             const id = req.params.id_product;
             const body = req.body;
             body.image = !req.file ? '' : req.file.filename;
             updatePacthModel(body, id)
-                .then((result) => {
-                    redisClient.del('produk')
-                    success(res, result, 'Update Patch Product Success');
-                })
-                .catch((err) => {
-                    failed(res, [], err.message)
-                })
-        }
-    })
+            .then((result) => {
+                  redisClient.del('produk')
+                  success(res, result, 'Update Patch Product Success');
+            })
+            .catch((err) => {
+                  res.status(500)
+                  failed(res, [], err.message)
+            })
+      }
+})
 }
 }
 
