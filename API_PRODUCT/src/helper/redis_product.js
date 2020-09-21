@@ -12,7 +12,7 @@ module.exports = {
             // // Pagination
             redisClient.get("produk", (err, data) => {
                 if (data) {
-                    const where = !req.query.where ? 'product_name' : req.query.where;
+                    const where = !req.query.where ? null : req.query.where;
                     const name = !req.query.name ? null : req.query.name;
                     const orderBy = !req.query.orderBy ? 'id' : req.query.orderBy;
                     const sort = !req.query.sort ? 'asc' : req.query.sort;
