@@ -12,6 +12,7 @@ module.exports = {
             // // Pagination
             redisClient.get("produk", (err, data) => {
                 if (data) {
+                    const where = !req.query.where ? 'product_name' : req.query.where;
                     const name = !req.query.name ? null : req.query.name;
                     const orderBy = !req.query.orderBy ? 'id' : req.query.orderBy;
                     const sort = !req.query.sort ? 'asc' : req.query.sort;
@@ -23,6 +24,11 @@ module.exports = {
                 let results = JSON.parse(data);
                 const sorting = _.orderBy(results,[orderBy],[sort])
                     let dataRedis = sorting
+                  
+                    if (where!==null) {
+                        const searchingCateogry = sorting.filter(e => e.category_name.toLowerCase().includes(where.toLowerCase()))
+                        dataRedis=searchingCateogry
+                    }
                     if (name!==null) {
                         const searching = sorting.filter(e => e.product_name.toLowerCase().includes(name.toLowerCase()))
                         dataRedis=searching
