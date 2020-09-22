@@ -126,11 +126,11 @@ const usersController = {
                                 }
                             }
                         }else{
-                            res.status(404)
+                            res.status(500)
                             notFound(res, [], "Wrong password");
                         }
                     } else {
-                        res.status(404)
+                        res.status(403)
                         notFound(res, [], "Email has not been activated");
                     }
                 } else {
