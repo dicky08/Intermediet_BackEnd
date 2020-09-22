@@ -5,7 +5,7 @@ const storage = multer.diskStorage({
         callback(null, 'src/img')
     },
     filename: (req, file, callback) => {
-        callback(null, `${file.fieldname}-${Date.now()}.png`);
+        callback(null, `${file.fieldname}-${Date.now()}.svg`);
     }
 });
 
