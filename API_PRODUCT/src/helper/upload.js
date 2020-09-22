@@ -14,7 +14,7 @@ const upload = multer({
     // Max 2 mb
     limits:{fileSize:2000000},
     fileFilter(req,file,callback) {
-        if (file.originalname.match(/\.(JPG|jpg|JPEG|jpeg|png|PNG)\b/)) {
+        if (file.originalname.match(/\.(JPG|jpg|JPEG|jpeg|png|PNG|SVG|svg)\b/)) {
             callback(null,true)
         }else{
             callback('File must be of type jpeg,jpg or png', null)
