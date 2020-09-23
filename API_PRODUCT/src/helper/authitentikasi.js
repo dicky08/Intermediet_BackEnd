@@ -16,8 +16,10 @@ module.exports = {
         const token = req.headers.token
         jwt.verify(token, JWTPRIVATE, (err, decode) => {
             if (err && err.name === 'TokenExpiredError') {
-                res.status(499 )
-                tokenFailed(res, 'Expired', [], 'Token has been expired ')
+                res.status(499).send({
+                  msg: 'tokenExpired'
+                  // tokenFailed(res, 'Expired', [], 'Token has been expired ')
+                })
             } else if (err && err.name === 'JsonWebTokenError') {
                 res.status(401)
                 tokenFailed(res, 'Unauthorized', [], 'Failed authentication')
@@ -30,8 +32,10 @@ module.exports = {
         const token = req.headers.token
         jwt.verify(token,JWTPRIVATE, (err,decoded) => {
             if (err && err.name==='TokenExpiredError') {
-                res.status(499)
-                tokenFailed(res, 'Expired', [], 'Token has been expired')
+              res.status(499).send({
+                msg: 'tokenExpired'
+                // tokenFailed(res, 'Expired', [], 'Token has been expired ')
+              })
             }else if(err&&err.name==='JsonWebTokenError'){
                 res.status(401)
                 tokenFailed(res, 'Unauthorized', [], 'Failed authentication')
