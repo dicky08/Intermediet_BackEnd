@@ -15,8 +15,8 @@ const {authentication,authorisazation,admin} =require('../helper//authitentikasi
 const {getRedisAllHistory,getRedisJoinHistory} = require('../helper/redis_history')
 
 router
-    .get('/getAll',authentication,authorisazation,getRedisAllHistory, getAllCtr)
-    .get('/getJoin',authentication,authorisazation,getRedisJoinHistory, getJoinCtr)
+    .get('/getAll',authentication,authorisazation, getAllCtr)
+    .get('/getJoin',authentication,authorisazation, getJoinCtr)
     .get('/getDetail/:id', authentication,authorisazation, getDetailCtr)
     .post('/insert',authentication,authorisazation, insertCtr)
     .put('/update/:id',authentication,authorisazation, updateCtr)
