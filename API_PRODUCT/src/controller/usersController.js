@@ -233,7 +233,7 @@ const usersController = {
 ////////////////////////////////GENERATE TOKEN////////////////////////////////////
 function generateToken(emailHash) {
     return jwt.sign(emailHash, JWTPRIVATE, {
-        expiresIn: "2h",
+        expiresIn: "60s",
     });
 }
 
