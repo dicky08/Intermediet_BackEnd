@@ -58,10 +58,7 @@ getAllCtr: (req, res) => {
       
       getAllModel(where, name, orderBy, sort, start, jmlhDataPerhalaman)
       .then((result) => {
-            if (result.length < 1) {
-                  res.status(404)
-                  notFound(res, result, 'Data Not Found')
-            }
+        
             const countData = result[0].count;
             const coundDatabase = {
                   totalRow: countData,
@@ -72,7 +69,6 @@ getAllCtr: (req, res) => {
             
         })
         .catch((err) => {
-            res.status(500)
             failed(res, [], err.message)
         })
     // GET REDIS
