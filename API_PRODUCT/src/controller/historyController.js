@@ -31,7 +31,7 @@ const historyController = {
 
         getAllModel()
             .then((result) => {
-                  redisClient.set('history', JSON.stringify(result))
+                  // redisClient.set('history', JSON.stringify(result))
                   success(res, result, 'Get All History Success');
             })
             .catch((err) => {
@@ -42,7 +42,7 @@ const historyController = {
       getJoinCtr: (req, res) => {
             getJoinModel()
             .then((result) => {
-                  redisClient.set('join_history', JSON.stringify(result))
+                  // redisClient.set('join_history', JSON.stringify(result))
                   success(res, result, 'Get Join All History Success');
             })
             .catch((err) => {
