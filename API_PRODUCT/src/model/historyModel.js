@@ -18,7 +18,7 @@ const historyModel = {
     },
     getJoinModel: (id) => {
         return new Promise((resolve, reject) => {
-            db.query(`SELECT DISTINCT history.id,history.cashier_name,history.orders_date, history.id,history.cashier_name,orders_date,invoice,history_detail.name_product,history.ppn,history.amount FROM history JOIN history_detail ON history.id=history_detail.history_id`,
+            db.query(`SELECT history.cashier_name, history_detail.product_id,history_detail.name_product, history_detail.qty, history_detail.price FROM history JOIN history_detail ON history.id=history_detail.history_id`,
                 (err, result) => {
                     if (err) {
                         reject(new Error(err));
