@@ -16,9 +16,9 @@ module.exports = {
         const token = req.headers.token
         jwt.verify(token, JWTPRIVATE, (err, decode) => {
             if (err && err.name === 'TokenExpiredError') {
-              res.status(498).send({
-                msg:'Expired'
-              })
+                res.send({
+                  msg: 'ExpiredToken '
+                })
             } else if (err && err.name === 'JsonWebTokenError') {
                 res.status(401)
                 tokenFailed(res, 'Unauthorized', [], 'Failed authentication')
