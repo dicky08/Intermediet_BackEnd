@@ -18,8 +18,8 @@ const {
 router
 
   .get("/best-product",getRedisBestProduct , besProductCtr)
-  .get("/getAll",getRedisProduct ,getAllCtr)
-  .get("/getDetail/:id_product", getDetailCtr)
+  .get("/getAll",authentication,authorisazation,getRedisProduct ,getAllCtr)
+  .get("/getDetail/:id_product",authentication,authorisazation, getDetailCtr)
   .post("/insert",authentication,authorisazation,admin,  insertCtr)
   .put("/update/:id_product",authentication,authorisazation,admin, updateCtr)
   .patch("/updatePatch/:id_product",authentication,authorisazation,admin, updatePatch)
