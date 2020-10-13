@@ -1,3 +1,4 @@
+const { split } = require('lodash');
 const multer = require('multer');
 const {failed} = require('../helper/respons')
 const storage = multer.diskStorage({
@@ -5,7 +6,8 @@ const storage = multer.diskStorage({
         callback(null, 'src/img')
     },
     filename: (req, file, callback) => {
-        callback(null, `${file.fieldname}-${Date.now()}.png`);
+      const exstensi = file.originalname.split('.')
+        callback(null, `${file.originalname}-${Date.now()}.${exstensi[1]}`);
     }
 });
 
