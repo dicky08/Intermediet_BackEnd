@@ -17,10 +17,9 @@ module.exports = {
         jwt.verify(token, JWTPRIVATE, (err, decode) => {
             if (err && err.name === 'TokenExpiredError') {
                 res.send({
-                  msg: 'ExpiredToken '
+                  message: 'ExpiredToken '
                 })
             } else if (err && err.name === 'JsonWebTokenError') {
-                res.status(401)
                 tokenFailed(res, 'Unauthorized', [], 'Failed authentication')
             } else {
                 next()
@@ -31,11 +30,11 @@ module.exports = {
         const token = req.headers.token
         jwt.verify(token,JWTPRIVATE, (err,decoded) => {
             if (err && err.name==='TokenExpiredError') {
-                res.status(405).send({
-                  msg:'Expired Admin'
+                res.send({
+                  message:'Expired Admin',
+                  code: 403
                 })
             }else if(err&&err.name==='JsonWebTokenError'){
-                res.status(401)
                 tokenFailed(res, 'Unauthorized', [], 'Failed authentication')
             }else{
                 const level = decoded.level
@@ -43,9 +42,8 @@ module.exports = {
                 if (level===admin) {
                     next()
                 }else{
-                    res.status(403)
                     res.json({
-                       Message: 'Access denied/forbidden, only admin can access this page!',
+                       message: 'Access denied/forbidden, only admin can access this page!',
                        Status: 'Denied',
                        Code: 403
                     })

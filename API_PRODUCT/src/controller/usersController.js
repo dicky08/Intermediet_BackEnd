@@ -66,7 +66,6 @@ const usersController = {
                 }
                 transporter.sendMail(mailOptions, (err, sukses) => {
                     if (err) {
-                        res.status(500)
                         failed(res, [], err.message);
                     } else {
                         success(res, [sukses], 'Oke')
@@ -77,7 +76,6 @@ const usersController = {
                 })
             })
             .catch((err) => {
-                res.status(500)
                 failed(res, [], err.message);
             });
     },
@@ -126,20 +124,16 @@ const usersController = {
                                 }
                             }
                         }else{
-                            res.status(500)
                             notFound(res, [], "Wrong password");
                         }
                     } else {
-                        res.status(403)
                         notFound(res, [], "Email has not been activated");
                     }
                 } else {
-                    res.status(404)
                     notFound(res, [], "Email has not been registered");
                 }
             })
             .catch((err) => {
-                res.status(500)
                 failed(res, [], err.message);
             });
     },
@@ -208,16 +202,14 @@ const usersController = {
         if (token) {
             jwt.verify(token, process.env.JWT_REGIS, (err, decode) => {
                 if (err) {
-                    res.status(500)
                     failed(res, [], 'Failed Activation!')
                 } else {
                     const email = decode.email
                     getUsers(email)
                         .then((result) => {
                             if (result.affectedRows) {
-                                success(res, { email }, 'Congratulation, Your account has been created!')
+                             return res.render('index', {email})
                             }
-                            res.status(500)
                             failed(res, [], 'Failed activation')
                         })
                         .catch((err) => {

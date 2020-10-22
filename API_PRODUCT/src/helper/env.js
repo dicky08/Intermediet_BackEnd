@@ -16,5 +16,6 @@ module.exports = {
     JWT_REGIS:process.env.JWT_REGIS, 
     URL:process.env.URL, 
     URL_LOKAL:process.env.URL_LOKAL, 
+    url_lokal_fe:process.env.url_lokal_fe, 
 
 }
