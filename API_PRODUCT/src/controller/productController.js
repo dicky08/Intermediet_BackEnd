@@ -37,7 +37,6 @@ besProductCtr: (req, res) => {
                   res.status(404)
                   notFound(res, result, 'Data Not Found')
             }
-            redisClient.set('best_product', JSON.stringify(result))
             success(res, result, 'Get Best Product Success');
       })
       .catch((err) => {
