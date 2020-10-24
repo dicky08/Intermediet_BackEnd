@@ -5,7 +5,6 @@ const historyModel = {
 
     getAllModel: () => {
         return new Promise((resolve, reject) => {
-            // id,history.cashier_name,orders_date,invoice,history_detail.name_product,history.ppn,history.amount FROM history JOIN history_detail ON history.id=history_detail.history_id
             db.query(`SELECT * FROM history`,
                 (err, result) => {
                     if (err) {

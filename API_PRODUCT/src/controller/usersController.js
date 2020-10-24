@@ -33,8 +33,7 @@ const usersController = {
         // Tampung data
         const data = {
             email: body.email,
-            password: hash,
-            level: body.level,
+            password: hash
         };
 
         /////////////////////////////////MODEL/////////////////////////////////
